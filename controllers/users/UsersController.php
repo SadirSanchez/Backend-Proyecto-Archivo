@@ -33,31 +33,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "Error al insertar el registro: " . $conn->error;
         }
     }
-
-    /*
-
-    $nameUser = $data['nameUser'];
-    echo "Nombres: $nameUser";
-
-    $lastName = $data['lastName'];
-    echo "Apellidos: $lastName";
-
-    $typeId = $data['typeId'];
-    echo "Tipo de identificación: $typeId";
-
-    $iDuser = $data['iDuser'];
-    echo "No. Identificación: $iDuser";
-
-    $eMail = $data['eMail'];
-    echo "Correo Electronico: $eMail";
-
-    $phone = $data['phone'];
-    echo "Teléfono: $phone";
-
-    $dependency = $data['dependency'];
-    echo "Dependencia: $dependency";
-
-    $role = $data['role'];
-    echo "Rol: $role";*/
 }
 ?>
