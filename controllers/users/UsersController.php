@@ -22,10 +22,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $phone = $data['phone'];
         $dependency = $data['dependency'];
         $role = $data['role'];
+        $password = $data['password'];
 
         $conn = $conection->conect();
-        $sql = "INSERT INTO users (NameUser,LastName,TypeId,Id,Email,Phone,Dependency,Role) VALUES 
-        ('$nameUser','$lastName','$typeId','$iDuser','$eMail','$phone','$dependency','$role')";
+        $sql = "INSERT INTO users (NameUser,LastName,TypeId,Id,Email,Phone,Dependency,Role,Password) VALUES 
+        ('$nameUser','$lastName','$typeId','$iDuser','$eMail','$phone','$dependency','$role', '$password')";
 
         if ($conn->query($sql) === TRUE) {
             echo "Registro insertado correctamente.";

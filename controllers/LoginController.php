@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Conexión fallida: " . $conn->connect_error;
     } else {
         // Realiza la consulta para verificar las credenciales del usuario
-        $query = "SELECT * FROM users WHERE Email='$nameUser' AND Id='$password'";
+        $query = "SELECT * FROM users WHERE Email='$nameUser' AND Password='$password'";
         $result = $conn->query($query);
 
         if ($result->num_rows > 0) {
