@@ -2,6 +2,7 @@
 require '../ext/Carbon/autoload.php';
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
+
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 
@@ -37,8 +38,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
     }
-
-
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -57,24 +56,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $query = "SELECT * FROM users WHERE Email='$email'";
         $result = $conn->query($query);
 
-        
-
         if ($result->num_rows > 0) {
             $user = $result->fetch_assoc();
-            date_default_timezone_set('America/Bogota');   
-            
-            if($user['ActiveSesion'] !== null){
+            date_default_timezone_set('America/Bogota');
+
+            if ($user['ActiveSesion'] !== null) {
                 $actualDate = Carbon::now();
                 $localSesionDateTime = new Carbon($user['ActiveSesion']);
                 $diff = $localSesionDateTime->diffInMinutes($actualDate);
-    
-    
-                if ($diff > 2) {
+
+                if ($diff > 60) {
                     echo 'sesiónInvalida';
                 } else {
                     echo 'Ok';
                 }
-            }else {
+            } else {
                 echo 'sesiónInvalida';
             }
         }
@@ -98,8 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $query = "SELECT * FROM users WHERE Email='$email'";
             $result = $conn->query($query);
 
-            
-
             if ($result->num_rows > 0) {
                 $user = $result->fetch_assoc();
                 $createat = $data['createat'];
@@ -107,12 +101,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $query = "UPDATE users SET ActiveSesion = '$createat' WHERE Id = '$userId' ";
                 $result = $conn->query($query);
             }
-
-
         }
     }
 }
-
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = file_get_contents("php://input");
