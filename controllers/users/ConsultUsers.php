@@ -1,33 +1,41 @@
 <?php
+// Encabezados para permitir el acceso desde cualquier origen
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Headers: Content-Type');
 
+// Se incluye el archivo de conexión
 require("../conection.php");
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    // Crea una instancia de la clase Conection
     $conection = new Conection();
-    if ($conection->validate() === 'ok') {
-        // Obtener los parámetros de búsqueda desde la solicitud
-        $input = file_get_contents("php://input");
-        $data = json_decode($input, true);
+    $conn = $conection->conect();
 
-        // Realizar la consulta para buscar usuarios
-        $conn = $conection->conect();
-        $nameUser = $data['nameUser'];
-        $iDuser = $data['iDuser'];
-        $sql = "SELECT * FROM users WHERE NameUser LIKE '%$nameUser%' or Id = '$iDuser'";
-
+    // Verifica la conexión
+    if ($conn->connect_error) {
+        echo "Conexión fallida: " . $conn->connect_error;
+    } else {
+        // Se obtiene campos de todos los usuarios
+        $sql = "SELECT Id, NameUser, LastName FROM users";
         $result = $conn->query($sql);
 
-        if ($result->num_rows > 0) {
-            $users = [];
-            while ($row = $result->fetch_assoc()) {
-                $users[] = $row;
-            }
-            echo json_encode($users);
-        } else {
-            echo json_encode([]);
-        }
+        // Verifica errores de consulta
+        // if (!$result) {
+        //     die(json_encode(array("error" => "Query failed", "details" => $conn->error)));
+        // }
+
+
+        // Convierte el resultado a un array asociativo
+        $users = $result->fetch_assoc();
+
+        // Devuelve los usuarios como JSON
+        header('Content-Type: application/json');
+        echo json_encode($users);
+
+        // Cierra la conexión
+        $conn->close();
     }
+
 }
+
 ?>
