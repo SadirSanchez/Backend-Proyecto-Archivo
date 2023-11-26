@@ -16,24 +16,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         echo "Conexión fallida: " . $conn->connect_error;
     } else {
         // Se obtiene campos de todos los usuarios
-        $sql = "SELECT Id, NameUser, LastName FROM users";
+        $sql = "SELECT * FROM users";
         $result = $conn->query($sql);
-
-        // Verifica errores de consulta
-        // if (!$result) {
-        //     die(json_encode(array("error" => "Query failed", "details" => $conn->error)));
-        // }
-
-
-        // Convierte el resultado a un array asociativo
-        $users = $result->fetch_assoc();
-
-        // Devuelve los usuarios como JSON
-        header('Content-Type: application/json');
-        echo json_encode($users);
 
         // Cierra la conexión
         $conn->close();
+
+        // Convierte el resultado a un array asociativo
+        $users = $result->fetch_all(MYSQLI_ASSOC);
+
+        // Devuelve los usuarios como JSON
+        header('Content-Type: application/json');
+        $usersResult = "";
+        for ( $i = 0; $i < count($users); $i++ ) {
+            $usersResult .= $users[$i]['NameUser']."-".$users[$i]['LastName']."-".$users[$i]['Id']. ",";
+                        
+         }
+        // $users = json_decode($users, true);
+        // $users = json_encode($users, true);
+         echo $usersResult;
+
     }
 
 }
