@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ('$name','$documentType','$selectedDatePicker','$inventory','$time','$dependency','$location')";
 
         if ($conn->query($sql) === TRUE) {
-            echo "Registro insertado correctamente.";
+            echo "Registro insertado correctamente";
         } else {
             echo "Error al insertar el registro: " . $conn->error;
         }
