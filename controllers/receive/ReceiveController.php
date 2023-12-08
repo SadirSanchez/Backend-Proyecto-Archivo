@@ -9,8 +9,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conection = new Conection();
     if ($conection->validate() === 'ok') {
 
-        $input = file_get_contents("php://input");
-        $data = json_decode($input, true);
+        $data = json_decode($_POST['data'], true);
+        $fileName = time().'.pdf';
+        $temporalRoute = $_FILES['file']['tmp_name'];
+        $dirFolder = '../../storage/'.date('Y-m-d').'/';
+        if (!file_exists($dirFolder)) {
+            mkdir($dirFolder, 0777, true); 
+        }
+        move_uploaded_file($temporalRoute, $dirFolder . $fileName);
 
         $dependency = $data['dependency'];
         $documentType = $data['documentType'];
@@ -19,10 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $selectedDatePicker = $data['selectedDatePicker'];
         $inventory = $data['inventory'];
         $location = $data['location'];
+        $fileRoute = $dirFolder . $fileName;
 
         $conn = $conection->conect();
-        $sql = "INSERT INTO document (DocumentName,DocumentType,DateElaboration,TotalInventory,RetentionTime,OriginDependency,PhysicalLocation) VALUES 
-        ('$name','$documentType','$selectedDatePicker','$inventory','$time','$dependency','$location')";
+        $sql = "INSERT INTO document (DocumentName,DocumentType,DateElaboration,TotalInventory,RetentionTime,OriginDependency,PhysicalLocation, FileRoute) VALUES 
+        ('$name','$documentType','$selectedDatePicker','$inventory','$time','$dependency','$location', '$fileRoute')";
 
         if ($conn->query($sql) === TRUE) {
             echo "Registro insertado correctamente";
