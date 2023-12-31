@@ -35,6 +35,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $documents = $result->fetch_all(MYSQLI_ASSOC);
 
+            foreach ($documents as &$document) {
+                $document['FileRoute'] = 'localhost/proyecto-archivo-back-end/' . $document['FileRoute'];
+            }
+
             // Devuelve los usuarios como JSON
             header('Content-Type: application/json');
 
